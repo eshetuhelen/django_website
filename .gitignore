@@ -1,0 +1,22 @@
+# Python environment and cache
+env/
+*.pyc
+__pycache__/
+
+# SQLite database files
+*.sqlite3
+
+# Node.js dependencies
+node_modules/
+
+# Logs and temporary files
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+# Ignore Python virtual environments
+petnet_env/

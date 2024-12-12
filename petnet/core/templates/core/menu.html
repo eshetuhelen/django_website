@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your E-commerce Store</title>
+    <style>
+        /* Neumorphic styles */
+        :root {
+            --bg-color: #e0e5ec;
+            --text-color: #333;
+            --shadow-color: #a3b1c6;
+            --highlight-color: #ffffff;
+            --accent-color: #4a90e2;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: var(--bg-color);
+            padding: 1rem;
+            box-shadow: 5px 5px 10px var(--shadow-color), -5px -5px 10px var(--highlight-color);
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .menu-item a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a:hover {
+            background-color: var(--highlight-color);
+            box-shadow: inset 2px 2px 5px var(--shadow-color), inset -2px -2px 5px var(--highlight-color);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--bg-color);
+            border-radius: 10px;
+            box-shadow: 5px 5px 10px var(--shadow-color), -5px -5px 10px var(--highlight-color);
+            display: none;
+            z-index: 1;
+            min-width: 150px;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown a:hover {
+            background-color: var(--highlight-color);
+        }
+
+        .menu-item:hover .dropdown {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* New styles for the logo and responsive design */
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: auto;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .menu {
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--bg-color);
+                box-shadow: 0 5px 10px var(--shadow-color);
+            }
+
+            .menu.active {
+                display: flex;
+            }
+
+            .menu-item {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+
+            .dropdown {
+                position: static;
+                box-shadow: none;
+                display: none;
+                margin-left: 1rem;
+            }
+
+            .menu-item:hover .dropdown {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">YourStore</a>
+        <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+        <ul class="menu">
+            <li class="menu-item">
+                <a href="#" class="dropdown-toggle">Categories</a>
+                <div class="dropdown">
+                    {% for category in categories %}
+                        <a href="{% url 'category_detail' category.slug %}">{{category.title}}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'about' %}">About</a>
+            </li>
+            <li class="menu-item">
+                <a href="{% url 'contact_us' %}">Contact us</a>
+            </li>
+            
+        </ul>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('.menu');
+            
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropdown = this.nextElementSibling;
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
+            });
+
+            menuToggle.addEventListener('click', function() {
+                menu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.matches('.dropdown-toggle') && !e.target.matches('.menu-toggle')) {
+                    const dropdowns = document.querySelectorAll('.dropdown');
+                    dropdowns.forEach(dropdown => {
+                        dropdown.style.display = 'none';
+                    });
+                    menu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
